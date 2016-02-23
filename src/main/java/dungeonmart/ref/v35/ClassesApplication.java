@@ -1,4 +1,4 @@
-package dungeonmart;
+package dungeonmart.ref.v35;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
