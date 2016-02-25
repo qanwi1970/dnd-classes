@@ -1,9 +1,6 @@
 package dungeonmart.ref.v35.classes.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.Entity;
@@ -14,6 +11,10 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Data
+@Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class ClassCharacter implements Serializable {
 
