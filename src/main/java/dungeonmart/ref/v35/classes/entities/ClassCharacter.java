@@ -14,9 +14,6 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Data
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class ClassCharacter implements Serializable {
 
