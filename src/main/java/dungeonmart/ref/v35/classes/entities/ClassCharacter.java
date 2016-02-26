@@ -1,8 +1,10 @@
 package dungeonmart.ref.v35.classes.entities;
 
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -19,7 +21,8 @@ import java.util.UUID;
 public class ClassCharacter implements Serializable {
 
     @Id
-    @GeneratedValue()
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
     private String classCharacterId;
 
     @NotBlank
@@ -31,6 +34,7 @@ public class ClassCharacter implements Serializable {
 
     private String hitDie;
 
+    @Column(length = 512)
     private String classSkills;
 
     private String skillPoints;
@@ -39,6 +43,7 @@ public class ClassCharacter implements Serializable {
 
     private String spellStat;
 
+    @Column(length = 1024)
     private String proficiencies;
 
     private String spellType;
@@ -47,8 +52,10 @@ public class ClassCharacter implements Serializable {
 
     private String epicFeatInterval;
 
+    @Column(length = 1024)
     private String epicFeatList;
 
+    @Column(columnDefinition = "TEXT")
     private String epicFullText;
 
     private String requiredRace;
@@ -71,6 +78,7 @@ public class ClassCharacter implements Serializable {
 
     private String requiredSpecial;
 
+    @Column(length = 512)
     private String spellList1;
 
     private String spellList2;
@@ -81,17 +89,18 @@ public class ClassCharacter implements Serializable {
 
     private String spellList5;
 
+    @Column(columnDefinition = "TEXT")
     private String fullText;
 
     private String reference;
 
     private String createdBy;
 
-    private Instant createdTime;
+    private long createdTime;
 
     private String modifiedBy;
 
-    private Instant modifiedTime;
+    private long modifiedTime;
 
     private boolean seedData;
 

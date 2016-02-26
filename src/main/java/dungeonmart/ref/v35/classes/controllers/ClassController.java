@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.Instant;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/classes")
@@ -44,7 +43,7 @@ public class ClassController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ClassCharacter create(@RequestBody @Valid ClassCharacter classCharacter) {
-        Instant now = Instant.now();
+        long now = Instant.now().getEpochSecond();
         classCharacter.setCreatedTime(now);
         classCharacter.setModifiedTime(now);
         return classRepository.save(classCharacter);
@@ -57,7 +56,7 @@ public class ClassController {
 
         classCharacter.setClassCharacterId(classId);
         classCharacter.setCreatedTime(oldClass.getCreatedTime());
-        classCharacter.setModifiedTime(Instant.now());
+        classCharacter.setModifiedTime(Instant.now().getEpochSecond());
 
         return classRepository.save(classCharacter);
     }
