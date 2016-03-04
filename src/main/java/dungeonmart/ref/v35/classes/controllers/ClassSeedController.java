@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dungeonmart.ref.v35.classes.entities.ClassCharacter;
 import dungeonmart.ref.v35.classes.entities.SeedClass;
+import dungeonmart.ref.v35.classes.entities.SeedClassTable;
 import dungeonmart.ref.v35.classes.repositories.ClassRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +28,13 @@ public class ClassSeedController {
     @Autowired
     ClassRepository classRepository;
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(path = "/class", method = RequestMethod.POST)
     public HttpEntity seedClasses() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         ClassLoader classLoader = getClass().getClassLoader();
         File seedFile = new File(classLoader.getResource("seed/classes.json").getFile());
-        List<SeedClass> seedClasses = mapper.readValue(seedFile, new TypeReference<List<SeedClass>>(){});
+        List<SeedClass> seedClasses = mapper.readValue(seedFile, new TypeReference<List<SeedClass>>() {
+        });
         for (SeedClass seedClass : seedClasses) {
             log.info(seedClass.getName());
             ClassCharacter classCharacter = ClassCharacter.builder()
@@ -74,6 +76,19 @@ public class ClassSeedController {
                     .seedData(true)
                     .build();
             classRepository.save(classCharacter);
+        }
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/table", method = RequestMethod.POST)
+    public HttpEntity seedClassTables() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        ClassLoader classLoader = getClass().getClassLoader();
+        File seedFile = new File(classLoader.getResource("seed/classtable.json").getFile());
+        List<SeedClassTable> seedClassTables = mapper.readValue(seedFile, new TypeReference<List<SeedClassTable>>() {});
+        for (SeedClassTable seedClassTable : seedClassTables) {
+            log.info(seedClassTable.getName() + ":" + seedClassTable.getLevel());
         }
 
         return new ResponseEntity(HttpStatus.OK);
