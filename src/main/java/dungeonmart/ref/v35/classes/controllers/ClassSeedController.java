@@ -3,9 +3,11 @@ package dungeonmart.ref.v35.classes.controllers;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dungeonmart.ref.v35.classes.entities.ClassCharacter;
+import dungeonmart.ref.v35.classes.entities.ClassTable;
 import dungeonmart.ref.v35.classes.entities.SeedClass;
 import dungeonmart.ref.v35.classes.entities.SeedClassTable;
 import dungeonmart.ref.v35.classes.repositories.ClassRepository;
+import dungeonmart.ref.v35.classes.repositories.ClassTableRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -27,6 +29,9 @@ public class ClassSeedController {
 
     @Autowired
     ClassRepository classRepository;
+
+    @Autowired
+    ClassTableRepository classTableRepository;
 
     @RequestMapping(path = "/class", method = RequestMethod.POST)
     public HttpEntity seedClasses() throws IOException {
@@ -89,6 +94,16 @@ public class ClassSeedController {
         List<SeedClassTable> seedClassTables = mapper.readValue(seedFile, new TypeReference<List<SeedClassTable>>() {});
         for (SeedClassTable seedClassTable : seedClassTables) {
             log.info(seedClassTable.getName() + ":" + seedClassTable.getLevel());
+            ClassTable classTable = ClassTable.builder()
+                    .name(seedClassTable.getName())
+                    .level(seedClassTable.getLevel())
+                    .baseAttackBonus(seedClassTable.getBase_attack_bonus())
+                    .fortitudeSave(seedClassTable.getFort_save())
+                    .reflexSave(seedClassTable.getRef_save())
+                    .willSave(seedClassTable.getWill_save())
+                    .casterLevel(seedClassTable.getCaster_level())
+                    .build();
+            classTableRepository.save(classTable);
         }
 
         return new ResponseEntity(HttpStatus.OK);

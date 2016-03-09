@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.io.Serializable;
-import java.time.Instant;
 import java.util.UUID;
 
 @Data
@@ -23,7 +22,8 @@ public class ClassCharacter implements Serializable {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    private String classCharacterId;
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID classCharacterId;
 
     @NotBlank
     private String name;

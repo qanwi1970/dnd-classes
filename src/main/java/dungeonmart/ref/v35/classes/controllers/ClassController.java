@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.Instant;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/classes")
@@ -32,7 +33,7 @@ public class ClassController {
     }
 
     @RequestMapping(value = "/{classId}", method = RequestMethod.GET)
-    public ClassCharacter find(@PathVariable String classId) {
+    public ClassCharacter find(@PathVariable UUID classId) {
         ClassCharacter classCharacter = classRepository.findOne(classId);
         if (classCharacter == null) {
             throw new CharacterClassNotFoundException();
@@ -50,7 +51,7 @@ public class ClassController {
     }
 
     @RequestMapping(value = "/{classId}", method = RequestMethod.PUT)
-    public ClassCharacter update(@PathVariable String classId, @RequestBody @Valid ClassCharacter classCharacter) {
+    public ClassCharacter update(@PathVariable UUID classId, @RequestBody @Valid ClassCharacter classCharacter) {
         ClassCharacter oldClass = classRepository.findOne(classId);
         if (oldClass == null) throw new CharacterClassNotFoundException();
 
@@ -62,7 +63,7 @@ public class ClassController {
     }
 
     @RequestMapping(value = "/{classId}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable String classId) {
+    public void delete(@PathVariable UUID classId) {
         classRepository.delete(classId);
     }
 
