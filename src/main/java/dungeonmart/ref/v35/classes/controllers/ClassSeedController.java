@@ -9,6 +9,7 @@ import dungeonmart.ref.v35.classes.entities.SeedClassTable;
 import dungeonmart.ref.v35.classes.repositories.ClassRepository;
 import dungeonmart.ref.v35.classes.repositories.ClassTableRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,8 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
+
+import static org.apache.commons.lang3.StringEscapeUtils.unescapeHtml4;
 
 @Slf4j
 @RestController
@@ -56,7 +59,7 @@ public class ClassSeedController {
                     .epicFeatBaseLevel(seedClass.getEpic_feat_base_level())
                     .epicFeatInterval(seedClass.getEpic_feat_interval())
                     .epicFeatList(seedClass.getEpic_feat_list())
-                    .epicFullText(seedClass.getEpic_full_text())
+                    .epicFullText(unescapeHtml4(seedClass.getEpic_full_text()))
                     .requiredRace(seedClass.getReq_race())
                     .requiredWeaponProficiency(seedClass.getReq_weapon_proficiency())
                     .requiredBaseAttackBonus(seedClass.getReq_base_attack_bonus())
@@ -72,7 +75,7 @@ public class ClassSeedController {
                     .spellList3(seedClass.getSpell_list_3())
                     .spellList4(seedClass.getSpell_list_4())
                     .spellList5(seedClass.getSpell_list_5())
-                    .fullText(seedClass.getFull_text())
+                    .fullText(unescapeHtml4(seedClass.getFull_text()))
                     .reference(seedClass.getReference())
                     .createdBy("seed")
                     .createdTime(Instant.now().getEpochSecond())
@@ -111,6 +114,27 @@ public class ClassSeedController {
                     .unarmedDamage(seedClassTable.getUnarmed_damage())
                     .powerLevel(seedClassTable.getPower_level())
                     .special(seedClassTable.getSpecial())
+                    .spellSlots0(seedClassTable.getSlots_0())
+                    .spellSlots1(seedClassTable.getSlots_1())
+                    .spellSlots2(seedClassTable.getSlots_2())
+                    .spellSlots3(seedClassTable.getSlots_3())
+                    .spellSlots4(seedClassTable.getSlots_4())
+                    .spellSlots5(seedClassTable.getSlots_5())
+                    .spellSlots6(seedClassTable.getSlots_6())
+                    .spellSlots7(seedClassTable.getSlots_7())
+                    .spellSlots8(seedClassTable.getSlots_8())
+                    .spellSlots9(seedClassTable.getSlots_9())
+                    .spellsKnown0(seedClassTable.getSpells_known_0())
+                    .spellsKnown1(seedClassTable.getSpells_known_1())
+                    .spellsKnown2(seedClassTable.getSpells_known_2())
+                    .spellsKnown3(seedClassTable.getSpells_known_3())
+                    .spellsKnown4(seedClassTable.getSpells_known_4())
+                    .spellsKnown5(seedClassTable.getSpells_known_5())
+                    .spellsKnown6(seedClassTable.getSpells_known_6())
+                    .spellsKnown7(seedClassTable.getSpells_known_7())
+                    .spellsKnown8(seedClassTable.getSpells_known_8())
+                    .spellsKnown9(seedClassTable.getSpells_known_9())
+                    .reference(seedClassTable.getReference())
                     .build();
             classTableRepository.save(classTable);
         }
