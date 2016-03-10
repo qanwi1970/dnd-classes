@@ -102,6 +102,15 @@ public class ClassSeedController {
                     .reflexSave(seedClassTable.getRef_save())
                     .willSave(seedClassTable.getWill_save())
                     .casterLevel(seedClassTable.getCaster_level())
+                    .pointsPerDay(seedClassTable.getPoints_per_day())
+                    .acBonus(seedClassTable.getAc_bonus())
+                    .flurryOfBlows(seedClassTable.getFlurry_of_blows())
+                    .bonusSpells(seedClassTable.getBonus_spells())
+                    .powersKnown(seedClassTable.getPowers_known())
+                    .unarmoredSpeedBonus(seedClassTable.getUnarmored_speed_bonus())
+                    .unarmedDamage(seedClassTable.getUnarmed_damage())
+                    .powerLevel(seedClassTable.getPower_level())
+                    .special(seedClassTable.getSpecial())
                     .build();
             classTableRepository.save(classTable);
         }
