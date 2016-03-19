@@ -50,8 +50,30 @@ public class ClassLevelController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public HttpEntity<ClassLevel> addOne(@RequestBody @Valid ClassLevel classLevel) {
+    public HttpEntity<ClassLevel> addOne(@PathVariable("classId") UUID classId, @RequestBody @Valid ClassLevel classLevel) {
         ClassLevel addedClassLevel = classLevelRepository.save(classLevel);
         return new ResponseEntity<>(addedClassLevel, HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/{level}", method = RequestMethod.PUT)
+    public HttpEntity<ClassLevel> updateOne(@PathVariable("classId") UUID classId,
+                                            @PathVariable("level") int level,
+                                            @RequestBody @Valid ClassLevel classLevel) {
+        ClassLevel updatedClassLevel = classLevelRepository.save(classLevel);
+        return new ResponseEntity<>(updatedClassLevel, HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/{level}", method = RequestMethod.DELETE)
+    public HttpEntity deleteOne(@PathVariable("classId") UUID classId, @PathVariable("level") int level) {
+        ClassCharacter classCharacter = classRepository.findOne(classId);
+        if (classCharacter == null) {
+            throw new CharacterClassNotFoundException();
+        }
+        ClassLevel classLevel = classLevelRepository.findByNameAndLevel(classCharacter.getName(), level);
+        if (classLevel == null) {
+            throw new ClassLevelNotFoundException();
+        }
+        classLevelRepository.delete(classLevel.getClassLevelId());
+        return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 }
