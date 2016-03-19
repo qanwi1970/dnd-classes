@@ -1,12 +1,12 @@
 package dungeonmart.ref.v35.classes.controllers;
 
 import dungeonmart.ref.v35.classes.entities.ClassCharacter;
+import dungeonmart.ref.v35.classes.exceptions.CharacterClassNotFoundException;
 import dungeonmart.ref.v35.classes.repositories.ClassRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -67,7 +67,4 @@ public class ClassController {
         classRepository.delete(classId);
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    static class CharacterClassNotFoundException extends RuntimeException {
-    }
 }

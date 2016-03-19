@@ -7,7 +7,7 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class SeedClassTable {
+public class SeedClassLevel {
     private int id;
     private String name;
     private int level;

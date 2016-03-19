@@ -15,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class ClassTable {
+public class ClassLevel {
 
     @Id
     @GeneratedValue(generator = "uuid2")

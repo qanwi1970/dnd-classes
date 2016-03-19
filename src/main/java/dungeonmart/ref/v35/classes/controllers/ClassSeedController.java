@@ -3,13 +3,12 @@ package dungeonmart.ref.v35.classes.controllers;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dungeonmart.ref.v35.classes.entities.ClassCharacter;
-import dungeonmart.ref.v35.classes.entities.ClassTable;
+import dungeonmart.ref.v35.classes.entities.ClassLevel;
 import dungeonmart.ref.v35.classes.entities.SeedClass;
-import dungeonmart.ref.v35.classes.entities.SeedClassTable;
+import dungeonmart.ref.v35.classes.entities.SeedClassLevel;
 import dungeonmart.ref.v35.classes.repositories.ClassRepository;
-import dungeonmart.ref.v35.classes.repositories.ClassTableRepository;
+import dungeonmart.ref.v35.classes.repositories.ClassLevelRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -19,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.time.Instant;
 import java.util.List;
 
@@ -31,16 +32,20 @@ import static org.apache.commons.lang3.StringEscapeUtils.unescapeHtml4;
 public class ClassSeedController {
 
     @Autowired
-    ClassRepository classRepository;
+    private ClassRepository classRepository;
 
     @Autowired
-    ClassTableRepository classTableRepository;
+    private ClassLevelRepository classLevelRepository;
 
     @RequestMapping(path = "/class", method = RequestMethod.POST)
     public HttpEntity seedClasses() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         ClassLoader classLoader = getClass().getClassLoader();
-        File seedFile = new File(classLoader.getResource("seed/classes.json").getFile());
+        URL resource = classLoader.getResource("seed/classes.json");
+        if (resource == null) {
+            throw new FileNotFoundException("classes.json is missing");
+        }
+        File seedFile = new File(resource.getFile());
         List<SeedClass> seedClasses = mapper.readValue(seedFile, new TypeReference<List<SeedClass>>() {
         });
         for (SeedClass seedClass : seedClasses) {
@@ -93,50 +98,54 @@ public class ClassSeedController {
     public HttpEntity seedClassTables() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         ClassLoader classLoader = getClass().getClassLoader();
-        File seedFile = new File(classLoader.getResource("seed/classtable.json").getFile());
-        List<SeedClassTable> seedClassTables = mapper.readValue(seedFile, new TypeReference<List<SeedClassTable>>() {});
-        for (SeedClassTable seedClassTable : seedClassTables) {
-            log.info(seedClassTable.getName() + ":" + seedClassTable.getLevel());
-            ClassTable classTable = ClassTable.builder()
-                    .name(seedClassTable.getName())
-                    .level(seedClassTable.getLevel())
-                    .baseAttackBonus(seedClassTable.getBase_attack_bonus())
-                    .fortitudeSave(seedClassTable.getFort_save())
-                    .reflexSave(seedClassTable.getRef_save())
-                    .willSave(seedClassTable.getWill_save())
-                    .casterLevel(seedClassTable.getCaster_level())
-                    .pointsPerDay(seedClassTable.getPoints_per_day())
-                    .acBonus(seedClassTable.getAc_bonus())
-                    .flurryOfBlows(seedClassTable.getFlurry_of_blows())
-                    .bonusSpells(seedClassTable.getBonus_spells())
-                    .powersKnown(seedClassTable.getPowers_known())
-                    .unarmoredSpeedBonus(seedClassTable.getUnarmored_speed_bonus())
-                    .unarmedDamage(seedClassTable.getUnarmed_damage())
-                    .powerLevel(seedClassTable.getPower_level())
-                    .special(seedClassTable.getSpecial())
-                    .spellSlots0(seedClassTable.getSlots_0())
-                    .spellSlots1(seedClassTable.getSlots_1())
-                    .spellSlots2(seedClassTable.getSlots_2())
-                    .spellSlots3(seedClassTable.getSlots_3())
-                    .spellSlots4(seedClassTable.getSlots_4())
-                    .spellSlots5(seedClassTable.getSlots_5())
-                    .spellSlots6(seedClassTable.getSlots_6())
-                    .spellSlots7(seedClassTable.getSlots_7())
-                    .spellSlots8(seedClassTable.getSlots_8())
-                    .spellSlots9(seedClassTable.getSlots_9())
-                    .spellsKnown0(seedClassTable.getSpells_known_0())
-                    .spellsKnown1(seedClassTable.getSpells_known_1())
-                    .spellsKnown2(seedClassTable.getSpells_known_2())
-                    .spellsKnown3(seedClassTable.getSpells_known_3())
-                    .spellsKnown4(seedClassTable.getSpells_known_4())
-                    .spellsKnown5(seedClassTable.getSpells_known_5())
-                    .spellsKnown6(seedClassTable.getSpells_known_6())
-                    .spellsKnown7(seedClassTable.getSpells_known_7())
-                    .spellsKnown8(seedClassTable.getSpells_known_8())
-                    .spellsKnown9(seedClassTable.getSpells_known_9())
-                    .reference(seedClassTable.getReference())
+        URL resource = classLoader.getResource("seed/classlevel.json");
+        if (resource == null) {
+            throw new FileNotFoundException("classlevel.json is missing");
+        }
+        File seedFile = new File(resource.getFile());
+        List<SeedClassLevel> seedClassLevels = mapper.readValue(seedFile, new TypeReference<List<SeedClassLevel>>() {});
+        for (SeedClassLevel seedClassLevel : seedClassLevels) {
+            log.info(seedClassLevel.getName() + ":" + seedClassLevel.getLevel());
+            ClassLevel classLevel = ClassLevel.builder()
+                    .name(seedClassLevel.getName())
+                    .level(seedClassLevel.getLevel())
+                    .baseAttackBonus(seedClassLevel.getBase_attack_bonus())
+                    .fortitudeSave(seedClassLevel.getFort_save())
+                    .reflexSave(seedClassLevel.getRef_save())
+                    .willSave(seedClassLevel.getWill_save())
+                    .casterLevel(seedClassLevel.getCaster_level())
+                    .pointsPerDay(seedClassLevel.getPoints_per_day())
+                    .acBonus(seedClassLevel.getAc_bonus())
+                    .flurryOfBlows(seedClassLevel.getFlurry_of_blows())
+                    .bonusSpells(seedClassLevel.getBonus_spells())
+                    .powersKnown(seedClassLevel.getPowers_known())
+                    .unarmoredSpeedBonus(seedClassLevel.getUnarmored_speed_bonus())
+                    .unarmedDamage(seedClassLevel.getUnarmed_damage())
+                    .powerLevel(seedClassLevel.getPower_level())
+                    .special(seedClassLevel.getSpecial())
+                    .spellSlots0(seedClassLevel.getSlots_0())
+                    .spellSlots1(seedClassLevel.getSlots_1())
+                    .spellSlots2(seedClassLevel.getSlots_2())
+                    .spellSlots3(seedClassLevel.getSlots_3())
+                    .spellSlots4(seedClassLevel.getSlots_4())
+                    .spellSlots5(seedClassLevel.getSlots_5())
+                    .spellSlots6(seedClassLevel.getSlots_6())
+                    .spellSlots7(seedClassLevel.getSlots_7())
+                    .spellSlots8(seedClassLevel.getSlots_8())
+                    .spellSlots9(seedClassLevel.getSlots_9())
+                    .spellsKnown0(seedClassLevel.getSpells_known_0())
+                    .spellsKnown1(seedClassLevel.getSpells_known_1())
+                    .spellsKnown2(seedClassLevel.getSpells_known_2())
+                    .spellsKnown3(seedClassLevel.getSpells_known_3())
+                    .spellsKnown4(seedClassLevel.getSpells_known_4())
+                    .spellsKnown5(seedClassLevel.getSpells_known_5())
+                    .spellsKnown6(seedClassLevel.getSpells_known_6())
+                    .spellsKnown7(seedClassLevel.getSpells_known_7())
+                    .spellsKnown8(seedClassLevel.getSpells_known_8())
+                    .spellsKnown9(seedClassLevel.getSpells_known_9())
+                    .reference(seedClassLevel.getReference())
                     .build();
-            classTableRepository.save(classTable);
+            classLevelRepository.save(classLevel);
         }
 
         return new ResponseEntity(HttpStatus.OK);
