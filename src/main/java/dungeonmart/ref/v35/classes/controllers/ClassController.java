@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,12 +27,14 @@ public class ClassController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable findAll(@RequestParam(value = "page", defaultValue = "0", required = false) int page,
-                            @RequestParam(value = "count", defaultValue = "10", required = false) int count,
-                            @RequestParam(value = "order", defaultValue = "ASC", required = false) Sort.Direction direction,
-                            @RequestParam(value = "sort", defaultValue = "name", required = false) String sortProperty) {
-        Page result = classRepository.findAll(new PageRequest(page, count, new Sort(direction, sortProperty)));
-        return result.getContent();
+    public HttpEntity<Iterable<ClassCharacter>> findAll(
+            @RequestParam(value = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(value = "count", defaultValue = "10", required = false) int count,
+            @RequestParam(value = "order", defaultValue = "ASC", required = false) Sort.Direction direction,
+            @RequestParam(value = "sort", defaultValue = "name", required = false) String sortProperty) {
+        PageRequest pageRequest = new PageRequest(page, count, new Sort(direction, sortProperty));
+        Page<ClassCharacter> result = classRepository.findAll(pageRequest);
+        return new ResponseEntity<>(result.getContent(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{classId}", method = RequestMethod.GET)
