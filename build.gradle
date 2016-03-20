@@ -24,6 +24,9 @@ repositories {
 	mavenCentral()
 }
 
+bootRun {
+    jvmArgs = [ "-Dspring.profiles.active=dev" ]
+}
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-actuator')
@@ -37,6 +40,7 @@ dependencies {
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.mockito:mockito-core')
+	testCompile('com.jayway.restassured:rest-assured:2.9.0')
 }
 
 task wrapper(type: Wrapper) {
