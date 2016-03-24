@@ -49,6 +49,6 @@ public class ClassControllerITests {
                 .get("/classes/{classId}", testClass.getClassCharacterId())
             .then()
                 .statusCode(200)
-                .body("name", Matchers.is("Test Class"));
+                .body("classCharacter.name", Matchers.is("Test Class"));
     }
 }
