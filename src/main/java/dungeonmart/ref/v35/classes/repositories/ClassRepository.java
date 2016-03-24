@@ -6,6 +6,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -14,4 +15,6 @@ public interface ClassRepository extends PagingAndSortingRepository<ClassCharact
     @Query("select c from ClassCharacter c where UPPER(c.name) like UPPER(?1) or " +
             "UPPER(c.fullText) like UPPER(?1)")
     List search(String term);
+
+    Optional<ClassCharacter> findByName(String name);
 }

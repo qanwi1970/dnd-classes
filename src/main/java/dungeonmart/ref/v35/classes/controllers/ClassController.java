@@ -3,14 +3,18 @@ package dungeonmart.ref.v35.classes.controllers;
 import dungeonmart.ref.v35.classes.entities.ClassCharacter;
 import dungeonmart.ref.v35.classes.exceptions.CharacterClassNotFoundException;
 import dungeonmart.ref.v35.classes.repositories.ClassRepository;
+import dungeonmart.ref.v35.classes.resources.ClassCharacterResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.hateoas.VndErrors;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.time.Instant;
@@ -38,27 +42,32 @@ public class ClassController {
     }
 
     @RequestMapping(value = "/{classId}", method = RequestMethod.GET)
-    public ClassCharacter find(@PathVariable UUID classId) {
+    public HttpEntity<?> find(@PathVariable UUID classId) {
         ClassCharacter classCharacter = classRepository.findOne(classId);
         if (classCharacter == null) {
-            throw new CharacterClassNotFoundException();
+            throw new CharacterClassNotFoundException(classId);
         } else {
-            return classCharacter;
+            return new ResponseEntity<Object>(new ClassCharacterResource(classCharacter), HttpStatus.OK);
         }
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ClassCharacter create(@RequestBody @Valid ClassCharacter classCharacter) {
+    public HttpEntity<?> create(@RequestBody @Valid ClassCharacter classCharacter) {
         long now = Instant.now().getEpochSecond();
         classCharacter.setCreatedTime(now);
         classCharacter.setModifiedTime(now);
-        return classRepository.save(classCharacter);
+        ClassCharacter savedClass = classRepository.save(classCharacter);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{classId}")
+                .buildAndExpand(savedClass.getClassCharacterId()).toUri());
+        return new ResponseEntity<>(savedClass, httpHeaders, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{classId}", method = RequestMethod.PUT)
     public ClassCharacter update(@PathVariable UUID classId, @RequestBody @Valid ClassCharacter classCharacter) {
         ClassCharacter oldClass = classRepository.findOne(classId);
-        if (oldClass == null) throw new CharacterClassNotFoundException();
+        if (oldClass == null) throw new CharacterClassNotFoundException(classId);
 
         classCharacter.setClassCharacterId(classId);
         classCharacter.setCreatedTime(oldClass.getCreatedTime());
@@ -72,4 +81,16 @@ public class ClassController {
         classRepository.delete(classId);
     }
 
+//    @ControllerAdvice
+//    class ClassControllerAdvice {
+//
+//        public ClassControllerAdvice(){}
+//
+//        @ResponseBody
+//        @ExceptionHandler(CharacterClassNotFoundException.class)
+//        @ResponseStatus(HttpStatus.NOT_FOUND)
+//        VndErrors characterClassNotFoundExceptionHandler(CharacterClassNotFoundException ex) {
+//            return new VndErrors("error", ex.getMessage());
+//        }
+//    }
 }

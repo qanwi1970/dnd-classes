@@ -30,7 +30,7 @@ public class ClassLevelController {
     public HttpEntity<List<ClassLevel>> getAll(@PathVariable("classId") UUID classId) {
         ClassCharacter classCharacter = classRepository.findOne(classId);
         if (classCharacter == null) {
-            throw new CharacterClassNotFoundException();
+            throw new CharacterClassNotFoundException(classId);
         }
         List<ClassLevel> classLevelList = classLevelRepository.findByName(classCharacter.getName());
         return new ResponseEntity<>(classLevelList, HttpStatus.OK);
@@ -40,7 +40,7 @@ public class ClassLevelController {
     public HttpEntity<ClassLevel> getOne(@PathVariable("classId") UUID classId, @PathVariable("level") int level) {
         ClassCharacter classCharacter = classRepository.findOne(classId);
         if (classCharacter == null) {
-            throw new CharacterClassNotFoundException();
+            throw new CharacterClassNotFoundException(classId);
         }
         ClassLevel classLevel = classLevelRepository.findByNameAndLevel(classCharacter.getName(), level);
         if (classLevel == null) {
@@ -67,7 +67,7 @@ public class ClassLevelController {
     public HttpEntity deleteOne(@PathVariable("classId") UUID classId, @PathVariable("level") int level) {
         ClassCharacter classCharacter = classRepository.findOne(classId);
         if (classCharacter == null) {
-            throw new CharacterClassNotFoundException();
+            throw new CharacterClassNotFoundException(classId);
         }
         ClassLevel classLevel = classLevelRepository.findByNameAndLevel(classCharacter.getName(), level);
         if (classLevel == null) {
